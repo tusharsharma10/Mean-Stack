@@ -1,0 +1,40 @@
+extends layout
+mixin outputRating(rating)
+   - for(var a=1; a <= rating; a++)
+      i.fa.fa-star.text-warning
+block content
+  
+  #banner.page-header
+  .row
+    .col-lg-6
+       h1= pageHeader.title
+        small &nbsp;#{pageHeader.strapline}
+  hr
+  
+  .row
+    .col-xs-12.col-sm-8
+     .row.list-group
+      each i in locations
+        .col-xs-12.col-lg-12.list-group-item.bg-dark
+          h4
+            a.text-light.mx-2(href="/location")= i.name
+            +outputRating(i.rating)
+            
+            label.float-right.text-danger= i.distance
+          
+          p.address.text-white= i.address
+          p
+          span
+          each x in i.facilities
+            label.bg-warning.p-1.mx-2= x
+        
+      
+      
+    
+    .col-xs-12.col-sm-4
+      p.lead.text-light Looking for wifi and a seat? Loc8r helps you find places to work when out and about. Perhaps with coffee, cake or a pint? Let Loc8r help you find the place you're looking for.
+
+  
+
+  
+

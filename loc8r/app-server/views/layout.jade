@@ -1,0 +1,36 @@
+doctype html
+html
+  head
+    title= title
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    link(rel="stylesheet", href='/bootstrap/bootstrap.min.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css")
+  body.bg-info
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-danger
+          a.navbar-brand(href='/')  
+            h3 Loc8r
+          button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
+              span.navbar-toggler-icon
+          #navbarSupportedContent.collapse.navbar-collapse
+              ul.navbar-nav.mr-auto
+                li.nav-item.ml-auto
+                  a.nav-link(href='/about') About
+                li.nav-item.ml-auto
+                  a.nav-link(href='/location') Location Info
+                li.nav-item.ml-auto
+                  a.nav-link(href='/location/review/new') Add Review
+    
+    .container-fluid.my-5
+      block content
+    
+      footer.footer
+        .row
+        .col-xs-12
+        small &copy; Tushar Sharma 2020
+
+    script(src='bootstrap/jquery.min.js')
+    
+    script(src='bootstrap/bootstrap.min.js')
+   
+    
