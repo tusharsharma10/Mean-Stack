@@ -38,5 +38,6 @@ module.exports.homeList = (req,res) => {
 
 module.exports.addReview = (req,res)=>{
 
+    console.log(req);
     res.render('add-review',{title:'Add Review'});
 };

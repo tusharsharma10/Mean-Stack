@@ -1,7 +1,5 @@
 extends layout
-mixin outputRating(rating)
-   - for(var a=1; a <= rating; a++)
-      i.fa.fa-star.text-warning
+include _includes/shared
 block content
   
   #banner.page-header
