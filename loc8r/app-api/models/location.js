@@ -10,6 +10,7 @@ var openingTimeSchema = new mongoose.Schema({
 });
 
 var reviewSchema = new mongoose.Schema({
+    id:String,
     author: String,
     rating: {type: Number, required: true, min: 0, max: 5},
     reviewText: String,
@@ -74,13 +75,13 @@ async function update(id){
 
     const loc = await Location.findByIdAndUpdate(id,{
 
-        $set:{
+        $push:{
             
             reviews: {
-                author: 'Ts',
-                rating: 3,
-                timestamp: new Date("Jul 16, 2013"),
-                reviewText: "What a great place. I can't say enough good things about it."
+                author: 'Messi',
+                rating:5,
+                timestamp: new Date("Jul 16, 2019"),
+                reviewText: "Marca"
                 
                 }
         }
