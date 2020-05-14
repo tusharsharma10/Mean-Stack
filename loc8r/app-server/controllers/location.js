@@ -1,3 +1,6 @@
+const request = require('request');
+const apiOptions = {server:'http://localhost:3000'};
+
 
 module.exports.locationInfo = (req,res) => {
 
@@ -7,7 +10,52 @@ module.exports.locationInfo = (req,res) => {
 
 module.exports.homeList = (req,res) => {
 
-    res.render('location-list', { title : 'Loc8r - find a place to work with wifi',
+   const path = '/api/locations';
+   requestOptions = {
+
+    url: apiOptions.server+path,
+    method:'GET',
+    json: {},
+    qs:{
+        lng : -0.7992599,
+        lat : 51.378091,
+    }
+
+   };
+    
+  
+
+   request(requestOptions,function(err,response,body){
+       renderHomePage(req,res,body);
+   });
+
+};
+
+
+const renderHomePage = function(req,res,responseBody){
+  
+    res.render('location-list',{
+        title : 'Loc8r - find a place to work with wifi',
+        pageHeader: {
+            
+            title: 'Loc8r',
+            strapline: 'Find places to work with wifi near you!'
+            
+        },
+        locations:responseBody
+    })
+};
+
+module.exports.addReview = (req,res)=>{
+
+    console.log(req);
+    res.render('add-review',{title:'Add Review'});
+};
+
+
+
+/*
+ res.render('location-list', { title : 'Loc8r - find a place to work with wifi',
     pageHeader: {
         title: 'Loc8r',
         strapline: 'Find places to work with wifi near you!'
@@ -33,11 +81,4 @@ module.exports.homeList = (req,res) => {
             }]
         
         });
-    
-};
-
-module.exports.addReview = (req,res)=>{
-
-    console.log(req);
-    res.render('add-review',{title:'Add Review'});
-};
+*/
