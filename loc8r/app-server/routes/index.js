@@ -7,7 +7,7 @@ const ctrlLocation =  require('../controllers/location');
 
 
 router.get('/about', ctrlOthers.about);
-router.get('/location',ctrlLocation.locationInfo);
+router.get('/location/:locationId',ctrlLocation.locationInfo);
 router.get('/location/review/new',ctrlLocation.addReview);
 router.get('',ctrlLocation.homeList);
 

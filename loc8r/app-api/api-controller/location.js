@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Loc = mongoose.model('Location');
-const maxDistance = 11;
+const maxDistance = 16;
 /**
  * $maxDistance uses metres therefore convert it in KM
  */
@@ -77,7 +77,7 @@ const locationBuilder = (req,res,results) =>{
       address: doc.address,
       rating: doc.rating,
       facilities: doc.facilities,
-      _id: doc._id
+      id: doc._id
     });
   });
   return locations;

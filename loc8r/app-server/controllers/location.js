@@ -4,8 +4,34 @@ const apiOptions = {server:'http://localhost:3000'};
 
 module.exports.locationInfo = (req,res) => {
 
-    res.render('location-info',{title:'Location Info'});
+    const path = '/api/locations/'+req.params.locationId;
+    requestOptions = {
 
+        url: apiOptions.server + path,
+        method:'GET',
+        json: {},
+        qs:{
+            lng : -0.7992599,
+            lat : 51.378091,
+        }
+    
+       };
+
+       request(requestOptions,function(err,response,body){
+           renderDetailsPage(req,res,body);
+       });
+   
+
+};
+
+const renderDetailsPage = function(req,res,body){
+
+    res.render('location-info',{
+        
+        body: body
+    
+    
+    });
 };
 
 module.exports.homeList = (req,res) => {
@@ -33,7 +59,10 @@ module.exports.homeList = (req,res) => {
 
 
 const renderHomePage = function(req,res,responseBody){
-  
+  let message = '';
+    if(responseBody.length === 0)
+     message = 'Sorry no places found nearby.';
+
     res.render('location-list',{
         title : 'Loc8r - find a place to work with wifi',
         pageHeader: {
@@ -42,7 +71,8 @@ const renderHomePage = function(req,res,responseBody){
             strapline: 'Find places to work with wifi near you!'
             
         },
-        locations:responseBody
+        locations:responseBody,
+        message: message
     })
 };
 
