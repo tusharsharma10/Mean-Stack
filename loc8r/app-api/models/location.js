@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-var openingTimeSchema = new mongoose.Schema({
+const openingTimeSchema = new mongoose.Schema({
     
     days: {type: String, required: true},
     opening: String,
@@ -9,7 +9,7 @@ var openingTimeSchema = new mongoose.Schema({
     
 });
 
-var reviewSchema = new mongoose.Schema({
+const reviewSchema = new mongoose.Schema({
     id:String,
     author: String,
     rating: {type: Number, required: true, min: 0, max: 5},
@@ -18,17 +18,28 @@ var reviewSchema = new mongoose.Schema({
     
 });
 
+
+
 const locationSchema = new mongoose.Schema({
 id:String,
 name:{type: String , required:true},
 address:String,
 rating:{type:Number , "default":0, min:0 , max:5 },
 facilities:[String],
-coords: {type: [Number], index: '2dsphere'},
+// geoJSON schema 1
+coords: 
+{
+    type: {type: String},
+    coordinates:[]
+    
+},
+
 openingTimes: [openingTimeSchema],
 reviews: [reviewSchema]
 });
 
+// geoJSON 2
+locationSchema.index({'coords':'2dsphere'})
 
 const Location = mongoose.model('Location',locationSchema);
 
@@ -36,11 +47,14 @@ async function saveRecords(){
 
     const loc = new Location({
 
-name: 'Starcups',
+name: 'Cafe Hero ',
 address: '125 High Street, Reading, RG6 1PS',
 rating: 3,
 facilities: ['Hot drinks', 'Food', 'Premium wifi'],
-coords: [-0.9690884, 51.455041],
+
+// geoJSON 3 storing in dbase
+coords: {type:'Point',coordinates:[-0.9690821, 51.455031]},
+
 openingTimes: [{
 days: 'Monday - Friday',
 opening: '7:00am',
@@ -75,15 +89,9 @@ async function update(id){
 
     const loc = await Location.findByIdAndUpdate(id,{
 
-        $push:{
+        $set:{
             
-            reviews: {
-                author: 'Messi',
-                rating:5,
-                timestamp: new Date("Jul 16, 2019"),
-                reviewText: "Marca"
-                
-                }
+            coords: {type:'Point',coordinates:[-0.9690884, 51.455041]},
         }
     });
 
