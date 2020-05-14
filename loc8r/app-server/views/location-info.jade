@@ -1,17 +1,43 @@
 extends layout
+include _includes/shared
 block content
 
   h1.text-white #{body.name}
   hr
-  .container
+  .container-fluid
     .row
-      .col-lg-6
+      .col-lg-4
         .card
           .card-header.text-white.bg-danger
             | Opening Hours
-          .card-body
-            p.card-text With supporting text below as a natural lead-in to additional content.
+          .card-body.bg-info
+           each i in body.openingTimes
+            if i.closed == false 
+              p.card-text.text-white #{i.days}: #{i.opening}-#{i.closing}
+            else
+              p.card-text.text-white #{i.days}: closed
 
-
-
-
+    .row.my-5
+      .col-lg-4
+        .card
+          .card-header.text-white.bg-danger
+            | Facilities
+          .card-body.bg-info
+               each i in body.facilities
+                span.card-text.text-white.bg-warning.mx-2.p-1 #{i}
+           
+           
+    .row.my-5
+      .col-lg-8
+        .card
+          .card-header.text-white.bg-danger
+            | Customer Reviews
+          .card-body.bg-info.list-group
+               each i in body.reviews
+                 span.card-text.text-white.list-group-item.bg-dark  
+                  span    
+                    +outputRating(i.rating) 
+                  span.mx-2 #{i.author}
+                  span.mx-3 #{i.createdOn}
+                 
+                 span.card-text.text-white.list-group-item.bg-info #{i.reviewText}
