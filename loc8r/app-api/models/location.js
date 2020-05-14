@@ -89,14 +89,20 @@ async function update(id){
 
     const loc = await Location.findByIdAndUpdate(id,{
 
-        $set:{
+        $push:{
             
-            coords: {type:'Point',coordinates:[-0.9690884, 51.455041]},
+            reviews:{
+
+                author:'Kaka ',
+                rating: 5,
+                reviewText: 'Nice place'
+
+            }
         }
     });
 
 }
 
-//update('5eba907774168444e8ee95b7');
+//update('5ebccec5f5782a346c72f58e');
 
 //saveRecords();
