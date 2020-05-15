@@ -118,9 +118,10 @@ module.exports.addReview = (req, res) => {
 
 const renderViewForm = (req,res,body) =>{
 
-   
+   console.log('renderViewForm');
     res.render('add-review', { 
         
+        error: req.query.err,
         body:body 
 
     
@@ -152,6 +153,10 @@ module.exports.postReview = (req,res)=>{
 
     };
 
+if(!postdata.author || !postdata.rating || !postdata.reviewText)
+    res.redirect('/location/' + req.params.locationId + '/review/new?err=val');
+
+else
     request(requestOptions,function(err,response,body){
         if (response.statusCode === 201) {
             res.redirect('/location/' + req.params.locationId);
