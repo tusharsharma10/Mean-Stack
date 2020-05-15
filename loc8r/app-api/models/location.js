@@ -47,13 +47,13 @@ async function saveRecords(){
 
     const loc = new Location({
 
-name: 'Cafe Hero ',
-address: '125 High Street, Reading, RG6 1PS',
+name: 'Starcups ',
+address: '128 High Street, Reading, RG6 1PS',
 rating: 3,
 facilities: ['Hot drinks', 'Food', 'Premium wifi'],
 
 // geoJSON 3 storing in dbase
-coords: {type:'Point',coordinates:[-0.9690821, 51.455031]},
+coords: {type:'Point',coordinates:[-0.8690821, 51.455031]},
 
 openingTimes: [{
 days: 'Monday - Friday',

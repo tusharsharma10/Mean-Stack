@@ -29,15 +29,23 @@ block content
            
     .row.my-5
       .col-lg-8
-        .card
-          .card-header.text-white.bg-danger
-            | Customer Reviews
-          .card-body.bg-info.list-group
-               each i in body.reviews
-                 span.card-text.text-white.list-group-item.bg-dark  
-                  span    
-                    +outputRating(i.rating) 
-                  span.mx-2 #{i.author}
-                  span.mx-3 #{i.createdOn}
-                 
-                 span.card-text.text-white.list-group-item.bg-info #{i.reviewText}
+        table.table.table-bordered.table-info.table-striped
+          thead.bg-danger.text-white
+            tr
+              th Customer reviews
+          tbody
+           each i in body.reviews 
+              tr
+                td 
+                  span
+                    span
+                      +outputRating(i.rating)
+                    span.mx-2 #{i.author}
+                    span.mx-3 
+                      +formatDate(i.createdOn)
+              tr
+                td
+                  span #{i.reviewText}
+        
+        a.btn.btn-secondary(href='/location/#{body._id}/review/new') Add Review
+

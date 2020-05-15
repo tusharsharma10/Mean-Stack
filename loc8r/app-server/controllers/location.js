@@ -1,87 +1,169 @@
 const request = require('request');
-const apiOptions = {server:'http://localhost:3000'};
+const apiOptions = { server: 'http://localhost:3000' };
 
 
-module.exports.locationInfo = (req,res) => {
-
-    const path = '/api/locations/'+req.params.locationId;
+const getLocationInfo = (req,res,callback)=>{
+    const path = '/api/locations/' + req.params.locationId;
     requestOptions = {
 
         url: apiOptions.server + path,
-        method:'GET',
+        method: 'GET',
         json: {},
-        qs:{
-            lng : -0.7992599,
-            lat : 51.378091,
-        }
-    
-       };
+        
 
-       request(requestOptions,function(err,response,body){
-           renderDetailsPage(req,res,body);
-       });
-   
+    };
+
+    request(requestOptions, function (err, response, body) {
+       
+        if (response.statusCode === 200)
+            callback(req, res, body);
+
+        else
+            showError(req, res, response.statusCode);
+
+    });
 
 };
 
-const renderDetailsPage = function(req,res,body){
 
-    res.render('location-info',{
-        
+module.exports.locationInfo = (req, res) => {
+
+    getLocationInfo(req,res,renderDetailsPage);
+
+   
+
+
+};
+
+
+const renderDetailsPage = function (req, res, body) {
+    
+    res.render('location-info', {
+
         body: body
-    
-    
+
+
     });
 };
 
-module.exports.homeList = (req,res) => {
+const showError = function (req, res, status) {
 
-   const path = '/api/locations';
-   requestOptions = {
-
-    url: apiOptions.server+path,
-    method:'GET',
-    json: {},
-    qs:{
-        lng : -0.7992599,
-        lat : 51.378091,
+    let title, content;
+    if (status === 404) {
+        title = "404, page not found";
+        content = "Oh dear. Looks like we can't find this page. Sorry.";
+    } else {
+        title = status + ", something's gone wrong";
+        content = "Something, somewhere, has gone just a little bit wrong.";
     }
+    res.status(status);
+    res.render('generic-text', {
+        title: title,
+        content: content
+    });
 
-   };
-    
-  
-
-   request(requestOptions,function(err,response,body){
-       renderHomePage(req,res,body);
-   });
 
 };
 
 
-const renderHomePage = function(req,res,responseBody){
-  let message = '';
-    if(responseBody.length === 0)
-     message = 'Sorry no places found nearby.';
+module.exports.homeList = (req, res) => {
 
-    res.render('location-list',{
-        title : 'Loc8r - find a place to work with wifi',
+    const path = '/api/locations';
+    requestOptions = {
+
+        url: apiOptions.server + path,
+        method: 'GET',
+        json: {},
+        qs: {
+            lng: -0.7992599,
+            lat: 51.378091,
+        }
+
+    };
+
+
+
+    request(requestOptions, function (err, response, body) {
+        renderHomePage(req, res, body);
+    });
+
+};
+
+
+const renderHomePage = function (req, res, responseBody) {
+    let message = '';
+    if (responseBody.length === 0)
+        message = 'Sorry no places found nearby.';
+
+    res.render('location-list', {
+        title: 'Loc8r - find a place to work with wifi',
         pageHeader: {
-            
+
             title: 'Loc8r',
             strapline: 'Find places to work with wifi near you!'
-            
+
         },
-        locations:responseBody,
+        locations: responseBody,
         message: message
     })
 };
 
-module.exports.addReview = (req,res)=>{
-
-    console.log(req);
-    res.render('add-review',{title:'Add Review'});
+module.exports.addReview = (req, res) => {
+    
+    getLocationInfo(req,res,renderViewForm);
+    
+    
+    
 };
 
+const renderViewForm = (req,res,body) =>{
+
+   
+    res.render('add-review', { 
+        
+        body:body 
+
+    
+    });
+    
+
+};
+
+
+module.exports.postReview = (req,res)=>{
+
+    console.log('Wriring Review');
+
+    let postdata = {
+        
+        author: req.body.username,
+        rating: parseInt(req.body.rating, 10),
+        reviewText: req.body.review
+        
+    };
+
+    const path = '/api/locations/' + req.params.locationId + '/reviews';
+    requestOptions = {
+
+        url: apiOptions.server + path,
+        method: 'POST',
+        json: postdata
+        
+
+    };
+
+    request(requestOptions,function(err,response,body){
+        if (response.statusCode === 201) {
+            res.redirect('/location/' + req.params.locationId);
+            
+        } else {
+            showError(req, res, response.statusCode);
+            
+        }
+
+    });
+
+};
 
 
 /*
@@ -109,6 +191,6 @@ module.exports.addReview = (req,res)=>{
             facilities: ['Food', 'Premium wifi'],
             distance: '250m'
             }]
-        
+
         });
 */

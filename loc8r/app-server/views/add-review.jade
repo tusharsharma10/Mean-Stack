@@ -1,17 +1,18 @@
 extends layout
 block content
 
- h1.display-3.text-white Review
+ h1.display-3.text-white Review #{body.name} 
  hr
  .row-justify-content-center
   .col-lg-6.col-sm-12
-    form.form-group(action='')
+    form.form-group(action='', method='post')
       label(for='username') Name
       input.form-control.my-2(type='text', name='username')
       label(for='rating') Rating
       input.form-control.my-2(type='number', name='rating')
       label(for='review') Review
       textarea.form-control.my-2(name='review', rows='3')
+      button.btn.btn-dark(type='submit') Post Review
 
 
 

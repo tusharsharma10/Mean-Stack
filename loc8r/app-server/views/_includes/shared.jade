@@ -1,3 +1,11 @@
 mixin outputRating(rating)
    - for(var a=1; a <= rating; a++)
       i.fa.fa-star.text-warning
+
+
+mixin formatDate(dateString)
+   -const date = new Date(dateString);
+   -let monthNames = [ "January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December" ];
+                        
+   -let output = date.getDate() + ' ' + monthNames[date.getMonth()] + ' ' + date.getFullYear();
+   =output     

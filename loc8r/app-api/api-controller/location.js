@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Loc = mongoose.model('Location');
-const maxDistance = 16;
+const maxDistance = 1600;
 /**
  * $maxDistance uses metres therefore convert it in KM
  */
@@ -27,7 +27,7 @@ const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
 const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
 const d = R * c; // in metres
-
+//console.log(d/1000);
   return Math.round(d/1000); // in kilometres  
 
 }
@@ -71,8 +71,9 @@ module.exports.locationsListByDistance = (req, res) => {
 const locationBuilder = (req,res,results) =>{
   let locations = [];
   results.forEach(function(doc) {
+    
     locations.push({
-      distance: calculateDistance(req.query.lat,req.query.lng,doc.coords.coordinates[1],doc.coords.coordinates[0]),
+      distance: calculateDistance(51.70,-0.8690821,doc.coords.coordinates[1],doc.coords.coordinates[0]),
       name: doc.name,
       address: doc.address,
       rating: doc.rating,
@@ -110,7 +111,7 @@ module.exports.locationsCreate = (req, res) => {
 
 
 module.exports.readOne = async (req, res) => {
-  // console.log(req.params.locationId);
+   
   const result = await Loc.findById(req.params.locationId)
   if (result === null) {
     sendJsonResponse(res, 404, { status: 'Not Found' });
