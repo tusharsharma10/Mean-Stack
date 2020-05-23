@@ -3,7 +3,7 @@ const router = express.Router();
 
 const ctrlLocations = require('../api-controller/location');
 const ctrlReviews = require('../api-controller/review');
-
+const ctrlUsers = require('../api-controller/users');
 
 // Location API
 router.get('/locations',ctrlLocations.locationsListByDistance);
@@ -18,6 +18,10 @@ router.post('/locations/:locationId/reviews', ctrlReviews.reviewsCreate);
 router.get('/locations/:locationId/reviews/:reviewId', ctrlReviews.reviewsReadOne);
 router.put('/locations/:locationId/reviews/:reviewId', ctrlReviews.reviewsUpdateOne);
 router.delete('/locations/:locationId/reviews/:reviewId', ctrlReviews.reviewsDeleteOne);
+
+
+//Users API
+router.post('/user/signup',ctrlUsers.signup);
 
 
 module.exports = router;

@@ -12,4 +12,6 @@ router.get('/location/:locationId/review/new',ctrlLocation.addReview);
 router.get('',ctrlLocation.homeList);
 router.post('/location/:locationId/review/new',ctrlLocation.postReview);
 
+
+
 module.exports = router;

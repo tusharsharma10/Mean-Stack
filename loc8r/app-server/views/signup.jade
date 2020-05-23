@@ -1,0 +1,17 @@
+extends layout
+block content
+    .row.justify-content-center.my-5
+        .col-lg-4.col-sm-4.col-md-4
+            form.form-group(action='', method='post', id='signup-form')
+                label(for='username') Name
+                input.form-control(type='text',name='username')
+                label(for='emailId') Email address
+                input.form-control(type='email',name='emailId')
+                small.form-text.text-muted We'll never share your email with anyone else.
+                label(for='password') Password
+                input.form-control(type='password',name='password')
+                button.btn.btn-danger.my-3(type='submit') Sign Up      
+                        
+                        
+                
+

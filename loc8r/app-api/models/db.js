@@ -6,3 +6,4 @@ const mongoose = require('mongoose');
 
 
 require('./location');
+require('./users');
