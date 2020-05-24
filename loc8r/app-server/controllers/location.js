@@ -1,6 +1,6 @@
 const request = require('request');
 const apiOptions = { server: 'http://localhost:3000' };
-
+const authenticate = require('../constants/authentication');
 
 const getLocationInfo = (req,res,callback)=>{
     const path = '/api/locations/' + req.params.locationId;
@@ -28,9 +28,14 @@ const getLocationInfo = (req,res,callback)=>{
 
 module.exports.locationInfo = (req, res) => {
 
-    getLocationInfo(req,res,renderDetailsPage);
+    const isAuthenticated = authenticate.getAuthentication();
+    
+    if(isAuthenticated)
+        getLocationInfo(req,res,renderDetailsPage);
+    
 
-   
+   else
+    res.redirect('/users/login');
 
 
 };

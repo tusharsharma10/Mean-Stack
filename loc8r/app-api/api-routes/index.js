@@ -22,6 +22,7 @@ router.delete('/locations/:locationId/reviews/:reviewId', ctrlReviews.reviewsDel
 
 //Users API
 router.post('/user/signup',ctrlUsers.signup);
+router.post('/user/login',ctrlUsers.login);
 
 
 module.exports = router;

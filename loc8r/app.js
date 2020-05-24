@@ -12,6 +12,7 @@ var routes = require('./app-server/routes/index.js');
 const routesApi = require('./app-api/api-routes/index.js');
 var users = require('./app-server/routes/users');
 
+//const session = require('express-session');
 
 
 // view engine setup
@@ -27,6 +28,8 @@ app.use(cookieParser());
 
 // static files setup
 app.use(express.static(path.join(__dirname, 'public')));
+
+//app.use(session({secret:'my secret',resave:false,saveUninitialized:false}));
 
 app.use('/', routes);
 app.use('/users', users);
