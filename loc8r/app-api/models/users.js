@@ -1,26 +1,33 @@
 const mongoose = require('mongoose');
 const joi = require('joi');
-
+const jwt = require('jsonwebtoken');
 //schema - model - sample data
 
-const userSchema =  new mongoose.Schema({
+const userSchema = new mongoose.Schema({
 
-username:{type:String,required:true},
-emailId:{type:String,unique:true},
-password:{type:String, required:true},
+    username: { type: String, required: true },
+    emailId: { type: String, unique: true },
+    password: { type: String, required: true },
 
 });
 
 
-const User = mongoose.model('User',userSchema);
+userSchema.methods.generateJwt = function () {
 
-async function saveUser(){
+    const payload = { _id: this._id };
+    const token = jwt.sign(payload, process.env.JWT_SECRET);
+    return token;
+}
+
+const User = mongoose.model('User', userSchema);
+
+async function saveUser() {
 
     const user = new User({
 
-        username:'messi',
-        emailId:'messi@gmail.com',
-        password:'ronaldo'
+        username: 'messi',
+        emailId: 'messi@gmail.com',
+        password: 'ronaldo'
 
     });
 
@@ -29,7 +36,7 @@ async function saveUser(){
 }
 
 
-module.exports.validateUser = function validateUser(user){
+module.exports.validateUser = function validateUser(user) {
 
     const schema = {
 
@@ -38,9 +45,8 @@ module.exports.validateUser = function validateUser(user){
         password: joi.string().required()
     };
 
-    return joi.validate(user,schema);
+    return joi.validate(user, schema);
 }
 
 //saveUser();
 
- 

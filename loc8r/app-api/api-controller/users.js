@@ -1,10 +1,10 @@
-const config = require('config');
+
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
 const userModel = require('../models/users');
 const _ = require('lodash');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+
 
 /**
  * Signup API method
@@ -32,8 +32,7 @@ const salt = await bcrypt.genSalt(10);
 user.password = await bcrypt.hash(user.password,salt);
 
 const result =  await user.save();
-const payload = {_id:result._id};
-const token = jwt.sign(payload,process.env.JWT_SECRET);
+const token = result.generateJwt();
 res.header('x-auth-token',token).status(200).send({
     name:result.username,
     emailId:result.emailId
@@ -62,8 +61,8 @@ const isValid = await bcrypt.compare(req.body.password,result.password);
     if(!isValid)
     return res.status(400).send('Invalid email or password');
 
-    const payload = {_id:result._id};
-    const token = jwt.sign(payload,process.env.JWT_SECRET);
+   
+    const token = result.generateJwt();
 
     res.send(token);
 
