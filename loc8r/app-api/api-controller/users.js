@@ -1,51 +1,72 @@
+const passport = require('passport');
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
 
-module.exports.signup = async (req,res)=>{
+module.exports.signup = async (req, res) => {
 
-const user = new User({
-
-    name: req.body.username,
-    emailId: req.body.emailId,
-    password: req.body.password
-
-});
-
-    try{
-       const result =  await user.save();
-       
-       console.log(result);
-       sendJsonResponse(res,201,result);
-       
-       
-       
+    if (!req.body.username || !req.body.emailId || !req.body.password) {
+        sendJsonResponse(res, 400, {
+            "message": "All fields required"
+        });
+        return;
     }
-       catch(err){
-        
-        
-         sendJsonResponse(res,400,{status:'Bad Request',stack:'Duplicate email id'});
-        console.log(err);
-    }
+
+    let user = new User();
+
+    user.name = req.body.username;
+    user.emailId = req.body.emailId;
+    user.setPassword(req.body.password);
+
+    user.save(function (err) {
+        let token;
+        if (err) {
+            console.log(err);
+            sendJsonResponse(res, 404, err);
+        }
+        else {
+            token = user.generateJwt();
+            sendJsonResponse(res, 200, { 'token': token });
+        }
+    });
+
+
 
 };
 
 
-module.exports.login  = async(req,res)=>{
-    
-const result = await User.find({emailId:req.body.emailId, password:req.body.password});
+module.exports.login = async (req, res) => {
 
+    if (!req.body.emailId || !req.body.password) {
+        sendJsonResponse(res, 400, {
+            "message": "All fields required"
+        });
+        return;
+    }
 
-    if(result === null || result.length === 0)
-    sendJsonResponse(res,400,{status:'Incorrect Credentials'});
+    passport.authenticate('local', function (err, user, info) {
+        let token;
 
-    else
-    sendJsonResponse(res,200,{status:'Success'});
+        if (err) {
+            sendJsonResponse(res, 404, err);
+            return;
+        }
+
+        if (user) {
+            token = user.generateJwt();
+            sendJsonResponse(res, 200, {
+                "token": token
+            });
+        } else {
+            sendJsonResponse(res, 401, info);
+
+        }
+    })(req, res);
 
 };
 
 
-const sendJsonResponse = function(res, status, content) {
+const sendJsonResponse = function (res, status, content) {
     res.status(status);
     res.json(content);
-    
+
 };

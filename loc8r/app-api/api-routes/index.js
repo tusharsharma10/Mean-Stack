@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
-
+const jwt = require('express-jwt');
+const auth = jwt({
+secret: process.env.JWT_SECRET,
+userProperty: 'payload'
+});
 const ctrlLocations = require('../api-controller/location');
 const ctrlReviews = require('../api-controller/review');
 const ctrlUsers = require('../api-controller/users');
@@ -14,10 +18,10 @@ router.delete('/locations/:locationId',ctrlLocations.deleteOne);
 
 
 // Reviews Api
-router.post('/locations/:locationId/reviews', ctrlReviews.reviewsCreate);
+router.post('/locations/:locationId/reviews',auth, ctrlReviews.reviewsCreate);
 router.get('/locations/:locationId/reviews/:reviewId', ctrlReviews.reviewsReadOne);
-router.put('/locations/:locationId/reviews/:reviewId', ctrlReviews.reviewsUpdateOne);
-router.delete('/locations/:locationId/reviews/:reviewId', ctrlReviews.reviewsDeleteOne);
+router.put('/locations/:locationId/reviews/:reviewId',auth, ctrlReviews.reviewsUpdateOne);
+router.delete('/locations/:locationId/reviews/:reviewId',auth, ctrlReviews.reviewsDeleteOne);
 
 
 //Users API

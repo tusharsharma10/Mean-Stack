@@ -22,7 +22,7 @@ console.log('Signup post');
 
 let postData = {
 
-name : req.body.name,
+    username : req.body.username,
 emailId : req.body.emailId,
 password : req.body.password
 
@@ -43,10 +43,11 @@ requestOptions = {
         if(response.statusCode === 201)
             res.redirect('/');
 
-        else
+        else 
+            if(response.statusCode === 400)
             res.render('error',{
 
-                message:'Email-Id already exists!',
+                message: "All fields required",
                 error:response
             });
 
