@@ -1,4 +1,7 @@
 //important modules 
+const dotenv = require('dotenv');
+dotenv.config();
+//const config = require('config');
 var express = require('express');
 const path = require('path');
 var logger = require('morgan');
@@ -14,6 +17,11 @@ var users = require('./app-server/routes/users');
 
 //const session = require('express-session');
 
+// if(!config.get('jwtPrivateKey')) {
+
+//     console.error('FATAL ERROR: jwtPrivateKey is not defined');
+//     process.exit(1);
+// }
 
 // view engine setup
 app.set('views', path.join(__dirname,'app-server', 'views'));
