@@ -4,6 +4,9 @@ const userModel = require('../models/users');
 const _ = require('lodash');
 const bcrypt = require('bcrypt');
 
+/**
+ * Signup API method
+ */
 
 module.exports.signup = async (req,res)=>{
 
@@ -37,18 +40,25 @@ res.status(200).send({
        
 };
 
-
+/**
+ * Login API MeTHOD
+ */
 
 module.exports.login  = async(req,res)=>{
     
-const result = await User.find({emailId:req.body.emailId, password:req.body.password});
+const {error} = userModel.validateUser(req.body);
+if(error) return res.statsu(400).send(error.details[0].message);
 
+const result = await User.findOne({emailId:req.body.emailId});
 
-    if(result === null || result.length === 0)
-    sendJsonResponse(res,400,{status:'Incorrect Credentials'});
+if(!result) return res.status(400).send('Invalid email or password');
 
-    else
-    sendJsonResponse(res,200,{status:'Success'});
+const isValid = await bcrypt.compare(req.body.password,result.password);
+
+    if(!isValid)
+    return res.status(400).send('Invalid email or password');
+
+    res.send(true);
 
 };
 
