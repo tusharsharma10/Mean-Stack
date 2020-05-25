@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
+const joi = require('joi');
 
 //schema - model - sample data
 
 const userSchema =  new mongoose.Schema({
 
-username:String,
+username:{type:String,required:true},
 emailId:{type:String,unique:true},
-password:String,
+password:{type:String, required:true},
 
 });
 
@@ -27,4 +28,19 @@ async function saveUser(){
 
 }
 
+
+module.exports.validateUser = function validateUser(user){
+
+    const schema = {
+
+        username: joi.string().required(),
+        emailId: joi.string().required().email(),
+        password: joi.string().required()
+    };
+
+    return joi.validate(user,schema);
+}
+
 //saveUser();
+
+ 

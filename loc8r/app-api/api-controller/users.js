@@ -1,33 +1,42 @@
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
+const userModel = require('../models/users');
+const _ = require('lodash');
+const bcrypt = require('bcrypt');
+
 
 module.exports.signup = async (req,res)=>{
 
-const user = new User({
+    const { error } = userModel.validateUser(req.body);
 
-    name: req.body.username,
+    if(error) return res.status(400).send(error.details[0].message);
+
+let user = await User.findOne({emailId:req.body.emailId});
+
+if(user) return res.status(400).send('User already Registered');
+
+ user = new User({
+
+    username: req.body.username,
     emailId: req.body.emailId,
     password: req.body.password
-
+    
 });
 
-    try{
-       const result =  await user.save();
-       
-       console.log(result);
-       sendJsonResponse(res,201,result);
-       
-       
-       
-    }
-       catch(err){
-        
-        
-         sendJsonResponse(res,400,{status:'Bad Request',stack:'Duplicate email id'});
-        console.log(err);
-    }
+const salt = await bcrypt.genSalt(10);
+user.password = await bcrypt.hash(user.password,salt);
 
+const result =  await user.save();
+res.status(200).send({
+    name:result.username,
+    emailId:result.emailId
+}); 
+   
+        
+      
+       
 };
+
 
 
 module.exports.login  = async(req,res)=>{
