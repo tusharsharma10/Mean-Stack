@@ -5,7 +5,6 @@ const userModel = require('../models/users');
 const _ = require('lodash');
 const bcrypt = require('bcrypt');
 
-
 /**
  * Signup API method
  */
@@ -50,7 +49,7 @@ res.header('x-auth-token',token).status(200).send({
 module.exports.login  = async(req,res)=>{
     
 const {error} = userModel.validateUser(req.body);
-if(error) return res.statsu(400).send(error.details[0].message);
+if(error) return res.status(400).send(error.details[0].message);
 
 const result = await User.findOne({emailId:req.body.emailId});
 
@@ -64,7 +63,10 @@ const isValid = await bcrypt.compare(req.body.password,result.password);
    
     const token = result.generateJwt();
 
-    res.send(token);
+    res.header('x-auth-token',token).status(200).send({
+        name:result.username,
+        emailId:result.emailId
+    }); 
 
 };
 
