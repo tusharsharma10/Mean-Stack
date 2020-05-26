@@ -1,13 +1,27 @@
+var token = null;
 var isAuthenticated = false;
 
-module.exports.setAuthentication = ()=>{
+module.exports.setAuthenticationToken = (jwttoken)=>{
 
+    token = jwttoken;
     isAuthenticated = true;
+        
+};
+
+module.exports.getAuthenticationToken = ()=>{
+
+    return token;
 
 };
 
-module.exports.getAuthentication = ()=>{
+module.exports.isAuthenticated = ()=>{
 
     return isAuthenticated;
+}
+
+module.exports.logout = ()=>{
+
+    token = null;
+    isAuthenticated = false;
 
 };

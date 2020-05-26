@@ -36,11 +36,24 @@ async function saveUser() {
 }
 
 
-module.exports.validateUser = function validateUser(user) {
+module.exports.validateUserSignup = function validateUser(user) {
 
     const schema = {
 
         username: joi.string().required(),
+        emailId: joi.string().required().email(),
+        password: joi.string().required()
+    };
+
+    return joi.validate(user, schema);
+}
+
+
+module.exports.validateUserLogin = function validateUser(user) {
+
+    const schema = {
+
+       
         emailId: joi.string().required().email(),
         password: joi.string().required()
     };

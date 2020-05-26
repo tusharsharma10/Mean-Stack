@@ -28,7 +28,7 @@ const getLocationInfo = (req,res,callback)=>{
 
 module.exports.locationInfo = (req, res) => {
 
-    const isAuthenticated = authenticate.getAuthentication();
+    const isAuthenticated = authenticate.isAuthenticated();
     
     if(isAuthenticated)
         getLocationInfo(req,res,renderDetailsPage);

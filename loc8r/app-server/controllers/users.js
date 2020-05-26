@@ -40,14 +40,18 @@ requestOptions = {
 
     request(requestOptions, function(err,response,body){
 
-        if(response.statusCode === 201)
+        if(response.statusCode === 200){
+
+            authenticate.setAuthenticationToken(response.header('x-auth-token'));
             res.redirect('/');
+        }
+            
 
         else
             res.render('error',{
 
-                message:'Email-Id already exists!',
-                error:response
+                message:response,
+                
             });
 
     });
@@ -74,19 +78,28 @@ const postData = {
 
     request(requestOptions,function(err,response,body){
 
+       // console.log(response.headers['x-auth-token']);
         if(response.statusCode === 200){
 
-            authenticate.setAuthentication();
+            authenticate.setAuthenticationToken(response.headers['x-auth-token']);
             res.redirect('/');
         }
 
         else
             res.render('error',{
 
-                message:'Incorrect credentials try again',
-                error:response
+                message:response,
+                
             });
 
     });
+
+};
+
+
+module.exports.logout = (req,res)=>{
+
+authenticate.logout();
+res.redirect('/');
 
 };

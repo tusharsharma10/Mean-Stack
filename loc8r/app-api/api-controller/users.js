@@ -11,7 +11,7 @@ const bcrypt = require('bcrypt');
 
 module.exports.signup = async (req,res)=>{
 
-    const { error } = userModel.validateUser(req.body);
+    const { error } = userModel.validateUserSignup(req.body);
 
     if(error) return res.status(400).send(error.details[0].message);
 
@@ -48,7 +48,7 @@ res.header('x-auth-token',token).status(200).send({
 
 module.exports.login  = async(req,res)=>{
     
-const {error} = userModel.validateUser(req.body);
+const {error} = userModel.validateUserLogin(req.body);
 if(error) return res.status(400).send(error.details[0].message);
 
 const result = await User.findOne({emailId:req.body.emailId});
